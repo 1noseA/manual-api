@@ -3,6 +3,7 @@ package com.manualapi;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,20 +29,33 @@ public class ManualController {
     }
 
     @PostMapping("/manual-api")
-    public boolean create(@RequestBody ManualsForm manualForm) {
+    public ResponseEntity<Manuals> create(@RequestBody ManualsForm manualForm) {
+    	// 入力値を設定
     	Manuals manual = setEntity(manualForm);
-        return manualsMapper.create(manual);
+    	// レコード登録者
+    	manual.setCreatedBy(manualForm.getUserNumber());
+    	// 登録
+    	manualsMapper.create(manual);
+        return ResponseEntity.ok(manual);
     }
 
     @PatchMapping("/manual-api/{manualId}")
-    public boolean update(@PathVariable int manualId, @RequestBody ManualsForm manualForm) {
+    public ResponseEntity<Manuals> update(@PathVariable int manualId, @RequestBody ManualsForm manualForm) {
+    	// 入力値を設定
     	Manuals manual = setEntity(manualForm);
-        return manualsMapper.update(manual);
+    	// マニュアルID
+    	manual.setManualId(manualId);
+    	// レコード更新者
+    	manual.setUpdatedBy(manualForm.getUserNumber());
+    	// 更新
+    	manualsMapper.update(manual);
+        return ResponseEntity.ok(manual);
     }
 
-    @DeleteMapping("/manual-api/{id}")
-    public boolean delete(@PathVariable int manualId) {
-        return manualsMapper.delete(manualId);
+    @DeleteMapping("/manual-api/{manualId}")
+    public ResponseEntity<Void> delete(@PathVariable int manualId) {
+    	manualsMapper.delete(manualId);
+        return ResponseEntity.noContent().build();
     }
 
     // 入力値をエンティティに設定
@@ -61,14 +75,6 @@ public class ManualController {
     	manual.setContent(manualForm.getContent());
     	// リンク
     	manual.setLink(manualForm.getLink());
-
-    	if (manualForm.getManualId() == 0) {
-    		// レコード登録者
-        	manual.setCreatedBy(manualForm.getUserNumber());
-    	} else {
-    		// レコード更新者
-        	manual.setUpdatedBy(manualForm.getUserNumber());
-    	}
 
     	return manual;
     }

@@ -15,7 +15,7 @@ public class Manuals {
 	private int userId;
 
 	// 表示順
-	private String displayOrder;
+	private int displayOrder;
 
 	// タイトル
 	private String title;

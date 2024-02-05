@@ -7,9 +7,6 @@ import lombok.Data;
 @Data
 public class ManualsForm {
 
-	// マニュアルID
-	private int manualId;
-
 	// 社員ID
 	private int userId;
 
@@ -17,7 +14,7 @@ public class ManualsForm {
 	private String userNumber;
 
 	// 表示順
-	private String displayOrder;
+	private int displayOrder;
 
 	// タイトル
 	private String title;
