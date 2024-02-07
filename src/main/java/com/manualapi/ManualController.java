@@ -28,12 +28,14 @@ public class ManualController {
 
     @GetMapping("/manual-api")
     public List<Manuals> getList() {
-        return manualsMapper.getList();
+    	List<Manuals> manualList = manualsMapper.getList();
+        return manualList;
     }
 
     @GetMapping("/manual-api/{manualId}")
     public Manuals getDetail(@PathVariable int manualId) {
-        return manualsMapper.getDetail(manualId);
+    	Manuals manual = manualsMapper.getDetail(manualId);
+        return manual;
     }
 
     @PostMapping("/manual-api")
