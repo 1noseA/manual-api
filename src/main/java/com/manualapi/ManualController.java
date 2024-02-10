@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.manualapi.validation.GroupOrder;
 
 @RestController
 public class ManualController {
@@ -39,7 +42,7 @@ public class ManualController {
     }
 
     @PostMapping("/manual-api")
-    public ResponseEntity<Manuals> create(@RequestBody ManualsForm manualForm) {
+    public ResponseEntity<Manuals> create(@Validated(GroupOrder.class) @RequestBody ManualsForm manualForm) {
     	// 入力値を設定
     	Manuals manual = setEntity(manualForm);
     	// レコード登録者
@@ -50,7 +53,7 @@ public class ManualController {
     }
 
     @PatchMapping("/manual-api/{manualId}")
-    public ResponseEntity<Manuals> update(@PathVariable int manualId, @RequestBody ManualsForm manualForm) {
+    public ResponseEntity<Manuals> update(@PathVariable int manualId, @Validated(GroupOrder.class) @RequestBody ManualsForm manualForm) {
     	// 入力値を設定
     	Manuals manual = setEntity(manualForm);
     	// マニュアルID
