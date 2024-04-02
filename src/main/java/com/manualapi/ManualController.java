@@ -1,5 +1,7 @@
 package com.manualapi;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,69 +20,85 @@ import com.manualapi.validation.GroupOrder;
 @RestController
 public class ManualController {
 
-	@Autowired
-	ManualsMapper manualsMapper;
+    @Autowired
+    ManualsMapper manualsMapper;
 
     @GetMapping("/manual-api")
     public List<Manuals> getList() {
-    	List<Manuals> manualList = manualsMapper.getList();
+        List<Manuals> manualList = manualsMapper.getList();
         return manualList;
     }
 
     @GetMapping("/manual-api/{manualId}")
     public Manuals getDetail(@PathVariable int manualId) {
-    	Manuals manual = manualsMapper.getDetail(manualId);
+        Manuals manual = manualsMapper.getDetail(manualId);
         return manual;
     }
 
     @PostMapping("/manual-api")
     public ResponseEntity<Manuals> create(@Validated(GroupOrder.class) @RequestBody ManualsForm manualForm) {
-    	// 入力値を設定
-    	Manuals manual = setEntity(manualForm);
-    	// レコード登録者
-    	manual.setCreatedBy(manualForm.getUserNumber());
-    	// 登録
-    	manualsMapper.create(manual);
+        // 入力値を設定
+        Manuals manual = setEntity(manualForm);
+        // レコード登録者
+        manual.setCreatedBy(manualForm.getUserNumber());
+        // 登録
+        manualsMapper.create(manual);
         return ResponseEntity.ok(manual);
     }
 
     @PatchMapping("/manual-api/{manualId}")
     public ResponseEntity<Manuals> update(@PathVariable int manualId, @Validated(GroupOrder.class) @RequestBody ManualsForm manualForm) {
-    	// 入力値を設定
-    	Manuals manual = setEntity(manualForm);
-    	// マニュアルID
-    	manual.setManualId(manualId);
-    	// レコード更新者
-    	manual.setUpdatedBy(manualForm.getUserNumber());
-    	// 更新
-    	manualsMapper.update(manual);
+        // 入力値を設定
+        Manuals manual = setEntity(manualForm);
+        // マニュアルID
+        manual.setManualId(manualId);
+        // レコード更新者
+        manual.setUpdatedBy(manualForm.getUserNumber());
+        // 更新
+        manualsMapper.update(manual);
         return ResponseEntity.ok(manual);
     }
 
     @DeleteMapping("/manual-api/{manualId}")
     public ResponseEntity<Void> delete(@PathVariable int manualId) {
-    	manualsMapper.delete(manualId);
+        manualsMapper.delete(manualId);
         return ResponseEntity.noContent().build();
     }
 
     // 入力値をエンティティに設定
     private Manuals setEntity(ManualsForm manualForm) {
-    	Manuals manual = new Manuals();
-    	// 社員ID
-    	manual.setUserId(manualForm.getUserId());
-    	// 表示順
-    	manual.setDisplayOrder(manualForm.getDisplayOrder());
-    	// タイトル
-    	manual.setTitle(manualForm.getTitle());
-    	// 掲載開始日
-    	manual.setStartDate(manualForm.getStartDate());
-    	// 掲載終了日
-    	manual.setEndDate(manualForm.getEndDate());
-    	// 内容
-    	manual.setContent(manualForm.getContent());
-    	// リンク
-    	manual.setLink(manualForm.getLink());
+        Manuals manual = new Manuals();
+        // 社員ID
+        manual.setUserId(manualForm.getUserId());
+        // 表示順
+        manual.setDisplayOrder(manualForm.getDisplayOrder());
+        // タイトル
+        manual.setTitle(manualForm.getTitle());
+        // 掲載開始日
+        if (manualForm.getStartYear() != "" &&
+            manualForm.getStartMonth() != "" &&
+            manualForm.getStartDay() != "") {
+            String startYear = "%2s".formatted(manualForm.getStartYear()).replace(" ", "0");
+            String startMonth = "%2s".formatted(manualForm.getStartMonth()).replace(" ", "0");
+            String startDay = "%2s".formatted(manualForm.getStartDay()).replace(" ", "0");
+            LocalDate startDate = LocalDate.parse(startYear + startMonth + startDay, DateTimeFormatter.ofPattern("yyyyMMdd"));
+            manual.setStartDate(startDate);
+        }
+        // 掲載終了日
+        if (manualForm.getEndYear() != "" &&
+            manualForm.getEndMonth() != "" &&
+            manualForm.getEndDay() != "") {
+            String endYear = "%2s".formatted(manualForm.getEndYear()).replace(" ", "0");
+            String endMonth = "%2s".formatted(manualForm.getEndMonth()).replace(" ", "0");
+            String endDay = "%2s".formatted(manualForm.getEndDay()).replace(" ", "0");
+            LocalDate endDate = LocalDate.parse(endYear + endMonth + endDay, DateTimeFormatter.ofPattern("yyyyMMdd"));
+            manual.setEndDate(endDate);
+        }
+        // 内容
+        manual.setContent(manualForm.getContent());
+        // リンク
+        manual.setLink(manualForm.getLink());
 
-    	return manual;
+        return manual;
     }
 }
