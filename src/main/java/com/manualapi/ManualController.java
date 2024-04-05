@@ -83,6 +83,8 @@ public class ManualController {
             String startDay = "%2s".formatted(manualForm.getStartDay()).replace(" ", "0");
             LocalDate startDate = LocalDate.parse(startYear + startMonth + startDay, DateTimeFormatter.ofPattern("yyyyMMdd"));
             manual.setStartDate(startDate);
+        } else {
+            manual.setStartDate(LocalDate.now());
         }
         // 掲載終了日
         if (manualForm.getEndYear() != "" &&
