@@ -4,81 +4,95 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.manualapi.ManualsMapper">
 
-	<!-- 全件取得 -->
+    <!-- 全件取得 -->
     <select id="getList" resultMap="ManualMap">
-        SELECT * FROM manuals
+        SELECT
+            *
+        FROM
+            manuals
+        WHERE
+            start_date &lt;= CURRENT_DATE
+        AND (end_date &gt;= CURRENT_DATE OR end_date IS NULL)
+        ORDER BY
+            display_order, manual_id
     </select>
 
- 	<!-- 1件取得 -->
+     <!-- 1件取得 -->
     <select id="getDetail" resultMap="ManualMap">
-        SELECT * FROM manuals
-        WHERE manual_id = #{manualId}
+        SELECT
+            *
+        FROM
+            manuals
+        WHERE
+            manual_id = #{manualId}
+        AND start_date &lt;= CURRENT_DATE
+        AND (end_date &gt;= CURRENT_DATE OR end_date IS NULL)
     </select>
 
-	<!-- マッピング -->
+    <!-- マッピング -->
     <resultMap id="ManualMap" type="com.manualapi.Manuals">
         <result property="manualId" column="manual_id" />
         <result property="userId" column="user_id" />
         <result property="displayOrder" column="display_order" />
         <result property="title" column="title" />
-		<result property="startDate" column="start_date" />
-		<result property="endDate" column="end_date" />
-		<result property="content" column="content" />
-		<result property="link" column="link" />
+        <result property="startDate" column="start_date" />
+        <result property="endDate" column="end_date" />
+        <result property="content" column="content" />
+        <result property="link" column="link" />
         <result property="createdBy" column="created_by" />
         <result property="createdAt" column="created_at" />
         <result property="updatedBy" column="updated_by" />
         <result property="updatedAt" column="updated_at" />
     </resultMap>
 
-	<!-- 登録 -->
+    <!-- 登録 -->
     <insert id="create" useGeneratedKeys="true" keyProperty="manualId">
-		INSERT INTO manuals
-		(
-			user_id,
-			display_order,
-			title,
-			start_date,
-			end_date,
-			content,
-			link,
-			created_by,
-			created_at
-		)
-		VALUES
-		(
-			#{userId},
-			#{displayOrder},
-			#{title},
-			#{startDate},
-			#{endDate},
-			#{content},
-			#{link},
-			#{createdBy},
-			CURRENT_TIMESTAMP
-		)
+        INSERT INTO manuals
+        (
+            user_id,
+            display_order,
+            title,
+            start_date,
+            end_date,
+            content,
+            link,
+            created_by,
+            created_at
+        )
+        VALUES
+        (
+            #{userId},
+            #{displayOrder},
+            #{title},
+            #{startDate},
+            #{endDate},
+            #{content},
+            #{link},
+            #{createdBy},
+            CURRENT_TIMESTAMP
+        )
     </insert>
 
     <!-- 更新 -->
     <update id="update">
-		UPDATE manuals SET
-    		user_id = #{userId},
-			display_order = #{displayOrder},
-			title = #{title},
-			start_date = #{startDate},
-			end_date = #{endDate},
-    		content = #{content},
-			link = #{link},
-			updated_by = #{updatedBy},
-			updated_at = CURRENT_TIMESTAMP
-    	WHERE
-			manual_id = #{manualId}
+        UPDATE manuals SET
+            user_id = #{userId},
+            display_order = #{displayOrder},
+            title = #{title},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            content = #{content},
+            link = #{link},
+            updated_by = #{updatedBy},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE
+            manual_id = #{manualId}
     </update>
 
-	<!-- 物理削除 -->
-	<delete id="delete">
-		DELETE FROM manuals
-		WHERE
-			manual_id = #{manualId}
+    <!-- 物理削除 -->
+    <delete id="delete">
+        DELETE FROM manuals
+        WHERE
+            manual_id = #{manualId}
     </delete>
 </mapper>
