@@ -19,15 +19,15 @@ public class ManualController {
     ManualsMapper manualsMapper;
 
     @GetMapping("/manual-api")
-    public List<Manuals> getList() {
+    public ResponseEntity<List<Manuals>> getList() {
         List<Manuals> manualList = manualsMapper.getList();
-        return manualList;
+        return ResponseEntity.ok(manualList);
     }
 
     @GetMapping("/manual-api/{manualId}")
-    public Manuals getDetail(@PathVariable int manualId) {
+    public ResponseEntity<Manuals> getDetail(@PathVariable int manualId) {
         Manuals manual = manualsMapper.getDetail(manualId);
-        return manual;
+        return ResponseEntity.ok(manual);
     }
 
     @PostMapping("/manual-api")
