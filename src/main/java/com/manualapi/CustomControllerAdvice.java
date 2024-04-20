@@ -18,27 +18,27 @@ public class CustomControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ HttpMessageNotReadableException.class, MethodArgumentNotValidException.class })
     public Map<String, Object> handleError400() {
-    	Map<String, Object> errorMap = new HashMap<String, Object>();
-    	errorMap.put("message", "リクエストが正しくありません。");
-    	errorMap.put("status", HttpStatus.BAD_REQUEST);
-		return errorMap;
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("message", "リクエストが正しくありません。");
+        errorMap.put("status", HttpStatus.BAD_REQUEST);
+        return errorMap;
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({ NoResourceFoundException.class })
     public Map<String, Object> handleError404() {
-    	Map<String, Object> errorMap = new HashMap<String, Object>();
-    	errorMap.put("message", "該当するエンドポイントがありませんでした。");
-    	errorMap.put("status", HttpStatus.NOT_FOUND);
-		return errorMap;
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("message", "該当するエンドポイントがありませんでした。");
+        errorMap.put("status", HttpStatus.NOT_FOUND);
+        return errorMap;
     }
 
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler({ HttpRequestMethodNotSupportedException.class })
     public Map<String, Object> handleError405() {
-    	Map<String, Object> errorMap = new HashMap<String, Object>();
-    	errorMap.put("message", "許可されていないメソッドでアクセスされました。");
-    	errorMap.put("status", HttpStatus.METHOD_NOT_ALLOWED);
-		return errorMap;
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("message", "許可されていないメソッドでアクセスされました。");
+        errorMap.put("status", HttpStatus.METHOD_NOT_ALLOWED);
+        return errorMap;
     }
 }

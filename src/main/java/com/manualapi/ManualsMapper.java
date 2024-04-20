@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ManualsMapper {
 
-	// 全件取得
+    // 全件取得
     public List<Manuals> getList();
 
     // 1件取得
